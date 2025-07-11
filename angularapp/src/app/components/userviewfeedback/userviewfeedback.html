@@ -1,0 +1,31 @@
+<div class="container">
+  <p>My Feedbacks</p>
+  <table class="feedbacks-table">
+    <thead>
+      <tr>
+        <th>S.No</th>
+        <th>Feedback</th>
+        <th width="1%">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let f of feedback; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ f.feedbackText }}</td>
+        <td>
+          <button (click)="confirmDelete(f)" class="delete-button">
+            Delete
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div *ngIf="isDeleteModalOpen" class="modal show">
+  <div class="modal-content">
+    <span class="close" (click)="closeDeleteModal()">&times;</span>
+    <p>Do you really want to delete this feedback?</p>
+    <button (click)="deleteFeedback()" class="delete-btn">Yes, Delete</button>
+    <button (click)="closeDeleteModal()" class="cancel-btn">Cancel</button>
+  </div>
+</div>

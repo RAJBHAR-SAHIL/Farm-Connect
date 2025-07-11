@@ -1,0 +1,87 @@
+<div class="container">
+  <p>Medicines</p>
+  <div class="search-container">
+    <input
+      type="text"
+      #search
+      placeholder="Search..."
+      (input)="searchChange(search.value)"
+      class="form-control search-input"
+    />
+    <select
+      #sortField
+      (change)="onSortFieldChange(sortField.value)"
+      class="form-control styled-select"
+    >
+      <option value="">Sort By</option>
+      <option value="medicineName">Medicine Name</option>
+      <option value="brand">Brand</option>
+      <option value="category">Category</option>
+      <option value="description">Description</option>
+      <option value="quantity">Quantity</option>
+      <option value="unit">Unit</option>
+      <option value="pricePerUnit">Price per Unit</option>
+    </select>
+  </div>
+
+  <table class="medicine-table" *ngIf="medicines && medicines.length > 0">
+    <thead>
+      <tr>
+        <th>S.No</th>
+        <th>Medicine Name</th>
+        <th>Brand</th>
+        <th>Category</th>
+        <th>Description</th>
+        <th>Quantity</th>
+        <th>Unit</th>
+        <th>Price per Unit</th>
+        <th width="23%">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let m of medicines; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ m.medicineName }}</td>
+        <td>{{ m.brand }}</td>
+        <td>{{ m.category }}</td>
+        <td>{{ m.description }}</td>
+        <td>{{ m.quantity }}</td>
+        <td>{{ m.unit }}</td>
+        <td>{{ m.pricePerUnit | currency : "INR" }}</td>
+        <td>
+          <button
+            class="edit-btn"
+            [routerLink]="['/supplierEditMedicine', m.medicineId]"
+          >
+            Edit
+          </button>
+          <button class="delete-btn" (click)="confirmDelete(m)">Delete</button>
+          <button class="show-img-btn" (click)="showImage(m.image!)">
+            Show Image
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="medicines.length === 0" class="nothing">No Records Found</div>
+</div>
+
+<div *ngIf="selectedImage" class="image-modal">
+  <div class="image-modal-content">
+    <h3 class="img-head">Cover Image</h3>
+    <span class="close-img" (click)="closeImage()">&times;</span>
+    <img [src]="selectedImage" alt="Medicine Image" />
+  </div>
+</div>
+
+<div class="modal" id="deleteModal" [class.show]="isDeleteModalOpen">
+  <div class="modal-content">
+    <p>Are you sure you want to delete this item?</p>
+    <button class="delete-btn" (click)="deleteMedicine()">Yes, Delete</button>
+    <button class="cancel-btn" (click)="closeDeleteModal()">Cancel</button>
+    <div *ngIf="errorMessage" style="color: red">
+      {{ errorMessage }}
+    </div>
+  </div>
+</div>

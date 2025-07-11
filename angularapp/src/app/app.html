@@ -1,0 +1,28 @@
+<div class="container" [ngClass]="{ 'home-bg': isHomePage }">
+  <header>
+    <div *ngIf="!store.getRole()">
+      <app-navbar></app-navbar>
+    </div>
+    <div *ngIf="store.getRole() === 'SUPPLIER'">
+      <app-adminnav></app-adminnav>
+    </div>
+    <div *ngIf="store.getRole() === 'OWNER'">
+      <app-usernav></app-usernav>
+    </div>
+  </header>
+
+  <div class="video-wrapper" *ngIf="isHomePage">
+    <video autoplay muted loop class="bg-video">
+      <source src="/assets/bgvideo.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+  </div>
+
+  <div class="content">
+    <router-outlet></router-outlet>
+  </div>
+
+  <div class="footer">
+    <app-footer></app-footer>
+  </div>
+</div>

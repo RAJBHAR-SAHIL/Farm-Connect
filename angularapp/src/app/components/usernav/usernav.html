@@ -1,0 +1,37 @@
+<header>
+  <div class="left-side" [routerLink]="['/home']">
+    <img class="img" src="/assets/user_owner_img.png" alt="img" />
+    <p>FARM-CONNECT</p>
+  </div>
+  <nav class="navbar">
+    <div class="name-role">{{ store.name() }}/{{ store.getRole() }}</div>
+    <a [routerLink]="['']">Home</a>
+    <div class="dropdown">
+      <button class="dropbtn">Livestock<i class="fa fa-caret-down"></i></button>
+      <div class="dropdown-content">
+        <a [routerLink]="['/addLivestock']">Add LiveStock</a>
+        <a [routerLink]="['/viewLivestock']">View LiveStock</a>
+      </div>
+    </div>
+    <a [routerLink]="['/ownerViewMedicine']">Medicines</a>
+    <a [routerLink]="['/ownerViewFeed']">Feeds</a>
+    <a [routerLink]="['/ownerRequest']">My Requests</a>
+    <div class="dropdown">
+      <button class="dropbtn">FeedBack<i class="fa fa-caret-down"></i></button>
+      <div class="dropdown-content">
+        <a [routerLink]="['/addFeedBack']">Post FeedBack</a>
+        <a [routerLink]="['/ViewFeedBack']">My FeedBack</a>
+      </div>
+    </div>
+    <button (click)="openLogoutModal()">LogOut</button>
+  </nav>
+</header>
+
+<div *ngIf="isLogoutModalOpen" class="modal show">
+  <div class="modal-content">
+    <h2>Confirm Logout</h2>
+    <p>Are you sure you want to log out?</p>
+    <button (click)="confirmLogout()" class="ok-button">Yes</button>
+    <button (click)="closeLogoutModal()" class="cancel-button">No</button>
+  </div>
+</div>

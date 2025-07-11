@@ -1,0 +1,94 @@
+<div class="container">
+  <div class="request-form">
+    <form [formGroup]="requestForm" (ngSubmit)="onSubmit()">
+      <h2>Request Form</h2>
+
+      <div class="form-group">
+        <label for="requestType">Request Type: </label>
+        <input type="text" formControlName="requestType" readonly />
+      </div>
+
+      <div
+        class="form-group"
+        *ngIf="requestForm.value.requestType === 'Medicine'"
+      >
+        <label for="medicineName">Medicine Name: </label>
+        <input type="text" formControlName="medicineName" />
+        <div
+          *ngIf="
+            requestForm.controls['medicineName'].invalid &&
+            requestForm.controls['medicineName'].touched
+          "
+          class="error-message"
+        >
+          Medicine Name Required
+        </div>
+      </div>
+
+      <div class="form-group" *ngIf="requestForm.value.requestType === 'Feed'">
+        <label for="feedName">Feed Name: </label>
+        <input type="text" formControlName="feedName" />
+        <div
+          *ngIf="
+            requestForm.controls['feedName'].invalid &&
+            requestForm.controls['feedName'].touched
+          "
+          class="error-message"
+        >
+          Feed Name Required
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="livestocks">Livestock:</label>
+        <select formControlName="livestockId">
+          <option
+            *ngFor="let livestock of livestocks"
+            [value]="livestock.livestockId"
+          >
+            {{ livestock.name }}
+          </option>
+        </select>
+        <div
+          *ngIf="
+            requestForm.controls['livestockId'].invalid &&
+            requestForm.controls['livestockId'].touched
+          "
+          class="error-message"
+        >
+          Livestock Required
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="quantity">Quantity:</label>
+        <input type="number" formControlName="quantity" />
+        <div
+          *ngIf="
+            requestForm.controls['quantity'].invalid &&
+            requestForm.controls['quantity'].touched
+          "
+          class="error-message"
+        >
+          Quantity Required
+        </div>
+      </div>
+
+      <div class="button-container">
+        <button type="submit" [disabled]="!requestForm.valid">Submit</button>
+        <button type="button" (click)="onCancel()">Cancel</button>
+      </div>
+    </form>
+  </div>
+
+  <div
+    id="successModal"
+    class="modal"
+    [ngStyle]="{ display: modalVisible ? 'block' : 'none' }"
+  >
+    <div class="modal-content">
+      <p>Successfully Submitted!</p>
+      <button (click)="navigateToViewMedicine()">OK</button>
+    </div>
+  </div>
+</div>

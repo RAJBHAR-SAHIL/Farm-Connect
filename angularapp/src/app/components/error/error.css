@@ -1,0 +1,19 @@
+.error-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  backdrop-filter: blur(3px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  font-weight: 500;
+  width: 100%;
+  margin: auto;
+  height: 100%;
+  background-image: url("/assets/error.svg");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}

@@ -1,0 +1,160 @@
+<div class="container">
+  <p>Requests</p>
+
+  <div class="search-container">
+    <input
+      type="text"
+      placeholder="Search requests..."
+      [formControl]="searchControl"
+      class="form-control search-input"
+    />
+    <select
+      #sortField
+      (change)="onSortFieldChange(sortField.value)"
+      class="form-control styled-select"
+    >
+      <option value="">Sort By</option>
+      <option value="requestType">Request Type</option>
+      <option value="medicine.medicineName">Medicine Name</option>
+      <option value="feed.feedName">Feed Name</option>
+      <option value="quantity">Quantity</option>
+      <option value="requestDate">Submission Date</option>
+      <option value="status">Status</option>
+    </select>
+  </div>
+
+  <table
+    class="request-table"
+    *ngIf="filteredRequests && filteredRequests.length > 0"
+  >
+    <thead>
+      <tr>
+        <th>S.No</th>
+        <th>Request Type</th>
+        <th>Medicine Name</th>
+        <th>Feed Name</th>
+        <th>Quantity</th>
+        <th>Submission Date</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let request of filteredRequests; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ request.requestType }}</td>
+        <td>
+          {{
+            request.requestType === "Medicine"
+              ? request.medicine?.medicineName
+              : "-"
+          }}
+        </td>
+        <td>
+          {{ request.requestType === "Feed" ? request.feed?.feedName : "-" }}
+        </td>
+        <td>{{ request.quantity }}</td>
+        <td>{{ request.requestDate | date : "mediumDate" }}</td>
+        <td>{{ request.status }}</td>
+        <td>
+          <button
+            class="approve-btn"
+            *ngIf="request.status === 'Pending' && request.requestId"
+            (click)="approveRequest(request.requestId)"
+          >
+            Approve
+          </button>
+          <button
+            class="reject-btn"
+            *ngIf="request.status === 'Pending' && request.requestId"
+            (click)="openRejectionModal(request.requestId)"
+          >
+            Reject
+          </button>
+          <button
+            class="show-livestock-btn"
+            (click)="showLivestock(request.livestock?.livestockId)"
+          >
+            Show Livestock
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div *ngIf="filteredRequests.length === 0" class="nothing">
+    No Records Found
+  </div>
+</div>
+
+<div class="modal" id="rejectionModal" [class.show]="isRejectionModalOpen">
+  <div class="modal-content">
+    <span class="close" (click)="closeRejectionModal()">&times;</span>
+    <h3 class="modal-head">Rejection Reason</h3>
+    <form [formGroup]="rejectionForm" (ngSubmit)="submitRejection()">
+      <textarea
+        formControlName="reason"
+        rows="4"
+        cols="50"
+        placeholder="Enter rejection reason"
+      ></textarea>
+      <div
+        *ngIf="
+          rejectionForm.get('reason')?.invalid &&
+          rejectionForm.get('reason')?.touched
+        "
+        class="error"
+      >
+        Rejection reason is required.
+      </div>
+      <button
+        class="submit-btn"
+        type="submit"
+        [disabled]="rejectionForm.invalid"
+      >
+        Submit
+      </button>
+      <button class="cancel-btn" type="button" (click)="closeRejectionModal()">
+        Cancel
+      </button>
+    </form>
+  </div>
+</div>
+
+<div class="livestock-modal" [class.show]="isLivestockModalOpen">
+  <div class="livestock-modal-content" *ngIf="selectedLivestock">
+    <h3 class="livestock-modal-head">Livestock Details</h3>
+    <div class="livestock-details">
+      <p class="livestock-paragraph">
+        <strong>Name:</strong> {{ selectedLivestock.name }}
+      </p>
+      <p class="livestock-paragraph">
+        <strong>Species:</strong> {{ selectedLivestock.species }}
+      </p>
+      <p class="livestock-paragraph">
+        <strong>Age:</strong> {{ selectedLivestock.age }}
+      </p>
+      <p class="livestock-paragraph">
+        <strong>Breed:</strong> {{ selectedLivestock.breed }}
+      </p>
+      <p class="livestock-paragraph" *ngIf="selectedLivestock.healthCondition">
+        <strong>Health Condition:</strong>
+        {{ selectedLivestock.healthCondition }}
+      </p>
+      <p class="livestock-paragraph">
+        <strong>Location:</strong> {{ selectedLivestock.location }}
+      </p>
+      <p
+        class="livestock-paragraph"
+        *ngIf="selectedLivestock.vaccinationStatus"
+      >
+        <strong>Vaccination Status:</strong>
+        {{ selectedLivestock.vaccinationStatus }}
+      </p>
+    </div>
+    <button class="livestock-close-btn" (click)="closeLivestockModal()">
+      Close
+    </button>
+  </div>
+</div>
+
+<!-- [*ngIf="request.livestock?.livestockId"] -->

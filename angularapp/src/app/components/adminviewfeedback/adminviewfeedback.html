@@ -1,0 +1,51 @@
+<div class="container">
+  <p class="heading">Feedback Details</p>
+
+  <table class="feedbacks-table" *ngIf="feedback && feedback.length > 0">
+    <thead>
+      <tr>
+        <th>SNo</th>
+        <th>User Name</th>
+        <th>Posted Date</th>
+        <th>Feedback</th>
+        <th width="11.5%">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let f of feedback; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ f.user?.username }}</td>
+        <td>{{ f.date | date : "mediumDate" }}</td>
+        <td>{{ f.feedbackText }}</td>
+        <td class="action-cell">
+          <button
+            (click)="showUserProfile(f.user?.userId)"
+            class="details-button"
+          >
+            Show Details
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!feedback || feedback.length === 0" class="nothing">
+    Oops! No Records Found
+  </div>
+</div>
+
+<!-- Modal -->
+<div *ngIf="isProfileModalOpen" class="modal show">
+  <div class="modal-content">
+    <h2>User Details</h2>
+    <p><strong>Name:</strong> {{ selectedUser?.username }}</p>
+    <p><strong>Email:</strong> {{ selectedUser?.email }}</p>
+    <p><strong>Mobile Number:</strong> {{ selectedUser?.mobileNumber }}</p>
+
+    <button (click)="closeProfileModal()" class="ok-button">OK</button>
+
+    <div *ngIf="errorMessage" class="errorMessage">
+      {{ errorMessage }}
+    </div>
+  </div>
+</div>

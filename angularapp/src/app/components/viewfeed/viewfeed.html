@@ -1,0 +1,88 @@
+<div class="container">
+  <p>Feeds</p>
+
+  <div class="search-container">
+    <input
+      type="text"
+      [(ngModel)]="searchAll"
+      (input)="onSearch($event)"
+      placeholder="Search feeds"
+      class="form-control search-input"
+    />
+    <select
+      #sortField
+      (change)="onSortFieldChange(sortField.value)"
+      class="form-control styled-select"
+    >
+      <option value="">Sort By</option>
+      <option value="feedName">Feed Name</option>
+      <option value="type">Feed Type</option>
+      <option value="description">Description</option>
+      <option value="quantity">Quantity</option>
+      <option value="unit">Unit</option>
+      <option value="pricePerUnit">Price Per Unit</option>
+    </select>
+  </div>
+
+  <table class="feeds-table" *ngIf="filteredFeeds && filteredFeeds.length > 0">
+    <thead>
+      <tr>
+        <th>S.No</th>
+        <th>Feed Name</th>
+        <th>Feed Type</th>
+        <th>Description</th>
+        <th>Quantity</th>
+        <th>Unit</th>
+        <th>Price Per Unit</th>
+        <th width="23%">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let feed of filteredFeeds; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ feed.feedName }}</td>
+        <td>{{ feed.type }}</td>
+        <td>{{ feed.description }}</td>
+        <td>{{ feed.quantity }}</td>
+        <td>{{ feed.unit }}</td>
+        <td>{{ feed.pricePerUnit | currency : "INR" }}</td>
+        <td>
+          <button
+            class="edit-btn"
+            [routerLink]="['/supplierEditFeed', feed.feedId]"
+          >
+            Edit
+          </button>
+          <button class="delete-btn" (click)="confirmDelete(feed)">
+            Delete
+          </button>
+          <button class="show-img-btn" (click)="showImage(feed.image!)">
+            Show Image
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="filteredFeeds.length === 0" class="nothing">No Records Found</div>
+</div>
+
+<div *ngIf="selectedImage" class="image-modal">
+  <div class="image-modal-content">
+    <h3 class="img-head">Cover Image</h3>
+    <span class="close-img" (click)="closeImage()">&times;</span>
+    <img [src]="selectedImage" alt="Feed Image" />
+  </div>
+</div>
+
+<div *ngIf="isDeleteModalOpen" class="modal show">
+  <div class="modal-content">
+    <span class="close" (click)="closeDeleteModal()">&times;</span>
+    <p>Do you really want to delete this feed?</p>
+    <button class="delete-btn" (click)="deleteFeed()">Yes, Delete</button>
+    <button class="cancel-btn" (click)="closeDeleteModal()">Cancel</button>
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+  </div>
+</div>

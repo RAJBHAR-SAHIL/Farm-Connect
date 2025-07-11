@@ -1,0 +1,48 @@
+<div class="container">
+  <div class="livestock-form">
+    <p>Add Feedback</p>
+    <form [formGroup]="FeedBackForm" (ngSubmit)="addFeedBack()">
+      <p class="feedback-info">
+        Your feedback is valuable to us. It helps us understand what we are
+        doing well and what we can improve. By sharing your thoughts, you help
+        us enhance our services and provide a better experience for everyone.
+        Thank you in advance for taking the time to share your feedback!
+      </p>
+
+      <div class="form-group">
+        <label for="feedbackText"
+          >Feedback <span class="required">*</span></label
+        >
+        <textarea
+          id="feedbackText"
+          formControlName="feedbackText"
+          class="feedback-input"
+          required
+        ></textarea>
+        <div
+          *ngIf="
+            FeedBackForm.controls['feedbackText'].invalid &&
+            FeedBackForm.controls['feedbackText'].touched
+          "
+          class="error-message"
+        >
+          Feedback is required
+        </div>
+      </div>
+
+      <div class="button-container">
+        <button type="submit" [disabled]="!FeedBackForm.valid">Submit</button>
+      </div>
+    </form>
+  </div>
+  <div
+    id="popup"
+    class="modal"
+    [ngStyle]="{ display: showPopup ? 'block' : 'none' }"
+  >
+    <div class="modal-content">
+      <p>Successfully Added!</p>
+      <button (click)="closePopup()" class="ok-button">OK</button>
+    </div>
+  </div>
+</div>

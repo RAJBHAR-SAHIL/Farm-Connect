@@ -1,0 +1,34 @@
+<div class="container">
+  <div class="login">
+    <p>Login</p>
+    <form (ngSubmit)="login()">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" name="username" [(ngModel)]="username" />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="password-wrapper">
+          <input
+            [type]="passwordFieldType"
+            name="password"
+            [(ngModel)]="password"
+            id="password"
+          />
+          <i
+            class="fas"
+            [ngClass]="
+              passwordFieldType === 'password' ? 'fa-eye' : 'fa-eye-slash'
+            "
+            (click)="togglePasswordVisibility()"
+          ></i>
+        </div>
+      </div>
+
+      <div class="button-container">
+        <button type="submit" [disabled]="!username || !password">Login</button>
+      </div>
+    </form>
+  </div>
+</div>

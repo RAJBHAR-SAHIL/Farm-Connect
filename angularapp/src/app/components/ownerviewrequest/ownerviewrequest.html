@@ -1,0 +1,80 @@
+<div class="container">
+  <p>User Request</p>
+  <div class="search-container">
+    <input
+      type="text"
+      [(ngModel)]="searchText"
+      (ngModelChange)="filteredRequests()"
+      placeholder="search..."
+      class="form-control"
+    />
+    <select
+      #sortField
+      (change)="onSortFieldChange(sortField.value)"
+      class="form-control styled-select"
+    >
+      <option value="">Sort By</option>
+      <option value="requestType">Request Type</option>
+      <option value="medicine.medicineName">Medicine Name</option>
+      <option value="feed.feedName">Feed Name</option>
+      <option value="quantity">Quantity</option>
+      <option value="requestDate">Submission Date</option>
+      <option value="status">Status</option>
+    </select>
+  </div>
+
+  <table *ngIf="filteredRequests().length > 0">
+    <thead>
+      <tr>
+        <th>S.No</th>
+        <th>Request Type</th>
+        <th>Medicine Name</th>
+        <th>Feed Name</th>
+        <th>Quantity</th>
+        <th>Submission Date</th>
+        <th>Status</th>
+        <th>Rejection Reason</th>
+        <th width="1%">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let request of filteredRequests(); let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ request.requestType }}</td>
+        <td>
+          {{
+            request.requestType === "Medicine"
+              ? request.medicine!.medicineName
+              : "-"
+          }}
+        </td>
+        <td>
+          {{ request.requestType === "Feed" ? request.feed!.feedName : "-" }}
+        </td>
+        <td>{{ request.quantity }}</td>
+        <td>{{ request.requestDate | date : "mediumDate" }}</td>
+        <td>{{ request.status }}</td>
+        <td>{{ request.rejectionReason ? request.rejectionReason : "nil" }}</td>
+        <td>
+          <button
+            (click)="openDelete(request.requestId!)"
+            class="delete-button"
+          >
+            Delete
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="filteredRequests().length === 0" class="nothing">
+    Oops! No Records Found
+  </div>
+</div>
+<div *ngIf="showModal" class="modal show">
+  <div class="modal-content">
+    <p>Are you sure you want to delete this request?</p>
+    <button (click)="deleteRequest()" class="delete-btn">Yes, Delete</button>
+    <button (click)="closeDelete()" class="cancel-btn">Cancel</button>
+  </div>
+</div>
